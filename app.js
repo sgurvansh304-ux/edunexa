@@ -159,6 +159,7 @@ function initSearch(){
   document.querySelectorAll("[data-search]").forEach(b=>b.addEventListener("click",()=>{$("questionSearch").value=b.dataset.search;run();}));
 }
 function init(){
+   alert("EduNexa JavaScript is running!");
   $("year").textContent=new Date().getFullYear();
   $("mobileMenu").addEventListener("click",()=>{const open=$("mainNav").classList.toggle("open");$("mobileMenu").setAttribute("aria-expanded",String(open));});
   document.querySelectorAll("[data-auth-mode]").forEach(b=>b.addEventListener("click",()=>setAuthMode(b.dataset.authMode)));
