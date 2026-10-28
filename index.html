@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1769e0">
+  <meta name="description" content="EduNexa: class-wise practice, topic worksheets and exam preparation for Classes 1–12, JEE and NEET.">
+  <title>EduNexa — Learn. Practice. Achieve.</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="EduNexa home">
+      <span class="brand-mark">E</span><span><strong>EduNexa</strong><small>Learn · Practice · Achieve</small></span>
+    </a>
+    <button class="mobile-menu" id="mobileMenu" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="nav" id="mainNav" aria-label="Main navigation">
+      <a href="#home" data-route="home">Home</a>
+      <a href="#classes" data-route="classes">Classes 1–12</a>
+      <a href="#jee-neet" data-route="jee-neet">JEE / NEET</a>
+      <a href="#worksheets" data-route="worksheets">Worksheets</a>
+      <a href="#mock-tests" data-route="mock-tests">Mock tests</a>
+      <a href="#pyqs" data-route="pyqs">PYQs</a>
+      <a href="#account" data-route="account" id="accountNav">Sign in</a>
+    </nav>
+  </header>
+
+  <main id="app" tabindex="-1">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">YOUR LEARNING JOURNEY STARTS HERE</span>
+        <h1>Learn smarter.<br><span>Achieve more.</span></h1>
+        <p>Practice with purpose. Explore topic-wise worksheets, prepare with mock tests, and build confidence one question at a time.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#classes">Explore classes <span aria-hidden="true">→</span></a>
+          <a class="button secondary" href="#mock-tests">Try a mock test</a>
+        </div>
+        <div class="trust-row"><span>✓ Class-wise learning</span><span>✓ Exam practice</span><span>✓ Track your progress</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="book-illustration"><span>✦</span><div class="book-page"></div><div class="book-page right"></div></div>
+        <div class="floating-card card-one"><span class="mini-icon">✓</span><span><b>Keep going!</b><small>Every question counts</small></span></div>
+        <div class="floating-card card-two"><span class="mini-icon blue">↗</span><span><b>Progress</b><small>Learn at your pace</small></span></div>
+      </div>
+    </section>
+
+    <section class="section quick-section">
+      <div class="section-heading"><div><span class="eyebrow">EXPLORE EDU NEXA</span><h2>Everything you need to practise</h2></div><p>Choose your path and start learning.</p></div>
+      <div class="feature-grid">
+        <a class="feature-card" href="#classes"><span class="feature-icon">▤</span><h3>Classes 1–12</h3><p>Browse by class, subject and topic.</p><span class="card-link">Explore classes →</span></a>
+        <a class="feature-card" href="#jee-neet"><span class="feature-icon">◎</span><h3>JEE &amp; NEET</h3><p>Build exam readiness with focused practice.</p><span class="card-link">Prepare now →</span></a>
+        <a class="feature-card" href="#worksheets"><span class="feature-icon">▧</span><h3>Topic worksheets</h3><p>Strengthen concepts with targeted questions.</p><span class="card-link">View worksheets →</span></a>
+        <a class="feature-card" href="#mock-tests"><span class="feature-icon">◷</span><h3>Mock tests</h3><p>Practise timed tests and review your score.</p><span class="card-link">Start a test →</span></a>
+      </div>
+    </section>
+
+    <section class="section study-section">
+      <div class="study-panel">
+        <div><span class="eyebrow">A BETTER STUDY ROUTINE</span><h2>Small steps. Strong results.</h2><p>Consistency matters more than cramming. Make a simple plan, practise actively, and review mistakes so every session teaches you something.</p></div>
+        <div class="tips-list">
+          <article><span>01</span><div><h3>Set one clear goal</h3><p>Pick a topic and decide what you want to understand today.</p></div></article>
+          <article><span>02</span><div><h3>Recall before you review</h3><p>Try answering from memory, then check your notes.</p></div></article>
+          <article><span>03</span><div><h3>Learn from mistakes</h3><p>Record tricky questions and revisit them later.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section question-section">
+      <div class="section-heading"><div><span class="eyebrow">READY WHEN YOU ARE</span><h2>Find your next practice session</h2></div></div>
+      <div class="search-panel">
+        <label class="search-box"><span aria-hidden="true">⌕</span><input id="questionSearch" type="search" placeholder="Search class, subject, topic or exam…" autocomplete="off"><button id="searchButton" class="button primary small">Search</button></label>
+        <div class="chips"><button class="chip" data-search="Mathematics">Mathematics</button><button class="chip" data-search="Science">Science</button><button class="chip" data-search="English">English</button><button class="chip" data-search="JEE">JEE</button><button class="chip" data-search="NEET">NEET</button><button class="chip" data-search="Previous year questions">Previous year questions</button></div>
+        <p id="searchMessage" class="muted" aria-live="polite">Search the practice library when question sets have been added.</p>
+      </div>
+    </section>
+
+    <section class="section library-section" id="librarySection">
+      <div class="section-heading"><div><span class="eyebrow">START EXPLORING</span><h2 id="libraryTitle">Choose a learning area</h2></div><p id="librarySubtitle">Select a section from the menu.</p></div>
+      <div id="libraryContent" class="library-content"><div class="empty-state"><span class="empty-symbol">✦</span><h3>Your learning space</h3><p>Choose Classes, JEE / NEET, Worksheets, PYQs or Mock tests from the navigation bar.</p></div></div>
+    </section>
+
+    <section class="section account-section" id="accountSection">
+      <div class="account-promo"><span class="eyebrow">YOUR LEARNING, IN ONE PLACE</span><h2>Save your progress with an account</h2><p>Create an account to save practice results and track your learning. Use a unique password and verify your email.</p><ul><li>Save your test results</li><li>Revisit bookmarked questions</li><li>Keep your progress connected to your account</li></ul></div>
+      <div class="auth-card" id="authCard">
+        <div class="auth-tabs"><button class="auth-tab active" data-auth-mode="signin">Sign in</button><button class="auth-tab" data-auth-mode="signup">Create account</button></div>
+        <form id="authForm">
+          <label>Email address<input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+          <label>Password<input id="authPassword" type="password" autocomplete="current-password" required minlength="8" placeholder="At least 8 characters"></label>
+          <div class="turnstile-wrap"><div id="turnstileWidget"></div><p class="hint">Human verification appears here after the site key is configured.</p></div>
+          <button class="button primary full" id="authSubmit" type="submit">Sign in securely</button>
+          <button class="text-button" id="resetPassword" type="button">Forgot password?</button>
+          <p id="authMessage" class="form-message" role="status" aria-live="polite"></p>
+        </form>
+        <div id="signedInPanel" class="signed-in-panel hidden"></div>
+      </div>
+    </section>
+
+    <section class="section admin-section hidden" id="adminSection">
+      <div class="section-heading"><div><span class="eyebrow">ADMIN WORKSPACE</span><h2>Manage question library</h2></div><p>Only approved admin accounts can publish questions.</p></div>
+      <form id="questionForm" class="admin-form">
+        <div class="form-grid">
+          <label>Title<input id="qTitle" required maxlength="180" placeholder="e.g. Linear equations practice"></label>
+          <label>Category<select id="qCategory"><option>Class 1–12</option><option>JEE</option><option>NEET</option></select></label>
+          <label>Class / exam level<input id="qLevel" required maxlength="40" placeholder="e.g. Class 10"></label>
+          <label>Subject<input id="qSubject" required maxlength="80" placeholder="e.g. Mathematics"></label>
+          <label>Topic<input id="qTopic" required maxlength="120" placeholder="e.g. Quadratic equations"></label>
+          <label>Resource type<select id="qType"><option>Worksheet</option><option>PYQ</option><option>Mock test</option><option>Practice paper</option><option>Important questions</option></select></label>
+        </div>
+        <label>Question / resource content<textarea id="qContent" required rows="5" placeholder="Enter a question set or concise resource description. Do not upload copyrighted material unless you have permission."></textarea></label>
+        <label>Answer and explanation<textarea id="qAnswer" rows="4" placeholder="Answer key and explanation (optional)"></textarea></label>
+        <label class="inline-check"><input id="qPublished" type="checkbox"> Publish immediately</label>
+        <button class="button primary" type="submit">Save resource</button>
+        <p id="adminMessage" class="form-message" role="status"></p>
+      </form>
+      <div id="adminResources" class="admin-resources"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-main"><a class="brand footer-brand" href="#home"><span class="brand-mark">E</span><span><strong>EduNexa</strong><small>Learn · Practice · Achieve</small></span></a><p>Build understanding, one question at a time.</p><div class="footer-links"><a href="#home">Home</a><a href="#account">Sign in</a><a href="mailto:hello@edunexa.example">Contact email (replace before launch)</a></div></div>
+    <div class="footer-bottom"><span>© <span id="year"></span> EduNexa</span><span>Use official exam sources to verify PYQs and answer keys.</span></div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
