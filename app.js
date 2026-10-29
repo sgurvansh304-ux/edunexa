@@ -4,7 +4,7 @@
    NEVER put a service-role key in browser code. */
 
 const CONFIG = {
-  supabaseUrl: "https://dzofvkmaugdjqxqhewtz.supabase.co/rest/v1/",
+  supabaseUrl: "https://dzofvkmaugdjqxqhewtz.supabase.co",
   supabaseAnonKey: "sb_publishable_Rnuf0q2FZM2q2iJx-FPMqg_SFCnfbw7",
   turnstileSiteKey: "0x4AAAAAAFrMs-e49jt5HxSF"
 };
