@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,17 +10,11 @@
   <link rel="stylesheet" href="/styles.css">
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-window.onerror = function(message, source, line) {
-  alert("JavaScript error: " + message + " at line " + line);
-};
-</script>
-
-<script src="/app.js?v=3"></script>
-<script>alert("External script test finished");</script>
+  <script src="/app.js?v=4" defer></script>
 </head>
+
 <body>
-  <script>alert("HTML JavaScript works!");</script>
+  
   <header class="site-header">
     <a class="brand" href="#home" aria-label="EduNexa home">
       <span class="brand-mark">E</span><span><strong>EduNexa</strong><small>Learn · Practice · Achieve</small></span>
