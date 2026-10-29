@@ -4,9 +4,9 @@
    NEVER put a service-role key in browser code. */
 
 const CONFIG = {
-  supabaseUrl: "YOUR_SUPABASE_PROJECT_URL",
-  supabaseAnonKey: "YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY",
-  turnstileSiteKey: "YOUR_CLOUDFLARE_TURNSTILE_SITE_KEY"
+  supabaseUrl: "https://dzofvkmaugdjqxqhewtz.supabase.co/rest/v1/",
+  supabaseAnonKey: "sb_publishable_Rnuf0q2FZM2q2iJx-FPMqg_SFCnfbw7",
+  turnstileSiteKey: "0x4AAAAAAFrMs-e49jt5HxSF"
 };
 
 const configured =
