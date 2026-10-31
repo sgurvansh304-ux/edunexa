@@ -25,6 +25,8 @@ let authMode = "signin";
 let turnstileToken = "";
 let turnstileWidgetId = null;
 let activeResources = [];
+let editingResourceId = null;
+let originalResourceSubmitText = "";
 
 const $ = (id) => document.getElementById(id);
 
@@ -642,20 +644,94 @@ async function loadAdminResources() {
   }
 
   box.innerHTML = (data || []).map(r => `
-    <article class="resource-card">
-      <span class="tag">${escapeHTML(r.published ? "Published" : "Draft")}</span>
-      <h3>${escapeHTML(r.title)}</h3>
-      <p>${escapeHTML([r.category, r.level, r.subject, r.topic].join(" · "))}</p>
-      <button class="button secondary small"
-        data-toggle-publish="${escapeHTML(r.id)}"
-        data-published="${r.published}">
-        ${r.published ? "Unpublish" : "Publish"}
-      </button>
-      <button class="button secondary small"
-        data-delete-resource="${escapeHTML(r.id)}">Delete</button>
-    </article>
-  `).join("") || '<p class="muted">No resources yet.</p>';
+  <article class="resource-card">
+    <span class="tag">${escapeHTML(r.published ? "Published" : "Draft")}</span>
+    <h3>${escapeHTML(r.title)}</h3>
+    <p>${escapeHTML([r.category, r.level, r.subject, r.topic].join(" · "))}</p>
 
+    <button class="button secondary small"
+      data-edit-resource="${escapeHTML(r.id)}">
+      Edit
+    </button>
+
+    <button class="button secondary small"
+      data-toggle-publish="${escapeHTML(r.id)}"
+      data-published="${r.published}">
+      ${r.published ? "Unpublish" : "Publish"}
+    </button>
+
+    <button class="button secondary small"
+      data-delete-resource="${escapeHTML(r.id)}">Delete</button>
+  </article>
+`).join("") || '<p class="muted">No resources yet.</p>';
+box.querySelectorAll("[data-edit-resource]").forEach(b => {
+  b.addEventListener("click", () => {
+    const resource = (data || []).find(
+      r => String(r.id) === b.dataset.editResource
+    );
+
+    if (!resource) return;
+
+    editingResourceId = resource.id;
+
+    $("qTitle").value = resource.title || "";
+    $("qCategory").value = resource.category || "Class 1–12";
+    $("qLevel").value = resource.level || "";
+    $("qSubject").value = resource.subject || "";
+    $("qTopic").value = resource.topic || "";
+    $("qType").value = resource.resource_type || "Worksheet";
+    $("qContent").value = resource.content || "";
+    $("qAnswer").value = resource.answer || "";
+    $("qPublished").checked = !!resource.published;
+
+    const form = $("questionForm");
+    const submitButton = form.querySelector(
+      'button[type="submit"], input[type="submit"]'
+    );
+
+    if (submitButton) {
+      if (!originalResourceSubmitText) {
+        originalResourceSubmitText =
+          submitButton.tagName === "INPUT"
+            ? submitButton.value
+            : submitButton.textContent;
+      }
+
+      if (submitButton.tagName === "INPUT") {
+        submitButton.value = "Save Changes";
+      } else {
+        submitButton.textContent = "Save Changes";
+      }
+    }
+
+    let cancelButton = $("cancelResourceEdit");
+
+    if (!cancelButton) {
+      cancelButton = document.createElement("button");
+      cancelButton.id = "cancelResourceEdit";
+      cancelButton.type = "button";
+      cancelButton.className = "button secondary";
+      cancelButton.textContent = "Cancel Edit";
+
+      form.appendChild(cancelButton);
+
+      cancelButton.addEventListener(
+        "click",
+        resetResourceEditor
+      );
+    }
+
+    setMessage(
+      "adminMessage",
+      "Editing resource. Save Changes to update it."
+    );
+
+    form.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  });
+});
   box.querySelectorAll("[data-toggle-publish]").forEach(b => {
     b.addEventListener("click", async () => {
       const { error } = await supabaseClient
@@ -711,18 +787,55 @@ async function saveResource(event) {
     published: $("qPublished").checked
   };
 
-  const { error } = await supabaseClient
-    .from("resources")
-    .insert(resource);
+  const wasEditing = editingResourceId !== null;
 
-  if (error) {
-    setMessage("adminMessage", error.message, true);
+  const result = wasEditing
+    ? await supabaseClient
+        .from("resources")
+        .update(resource)
+        .eq("id", editingResourceId)
+    : await supabaseClient
+        .from("resources")
+        .insert(resource);
+
+  if (result.error) {
+    setMessage("adminMessage", result.error.message, true);
     return;
   }
 
-  $("questionForm").reset();
-  setMessage("adminMessage", "Resource saved.");
+  resetResourceEditor();
+
+  setMessage(
+    "adminMessage",
+    wasEditing ? "Resource updated." : "Resource saved."
+  );
+
   await loadAdminResources();
+}
+
+function resetResourceEditor() {
+  editingResourceId = null;
+
+  const form = $("questionForm");
+
+  if (form) form.reset();
+
+  const cancelButton = $("cancelResourceEdit");
+  if (cancelButton) cancelButton.remove();
+
+  const submitButton = form?.querySelector(
+    'button[type="submit"], input[type="submit"]'
+  );
+
+  if (submitButton && originalResourceSubmitText) {
+    if (submitButton.tagName === "INPUT") {
+      submitButton.value = originalResourceSubmitText;
+    } else {
+      submitButton.textContent = originalResourceSubmitText;
+    }
+  }
+
+  setMessage("adminMessage", "");
 }
 
 function initSearch() {
